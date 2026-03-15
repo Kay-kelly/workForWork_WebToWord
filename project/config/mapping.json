@@ -1,0 +1,77 @@
+{
+  "version": "1.0",
+  "global": {
+    "default_font_path": "assets/fonts/NotoSansTC-Regular.ttf",
+    "default_font_size": 24,
+    "default_color": "#000000",
+    "default_align": "left",
+    "debug_grid": false
+  },
+  "templates": [
+    {
+      "template_id": "A",
+      "template_image": "assets/templates/template_a.png",
+      "fields": [
+        {
+          "name": "duration",
+          "source": "duration",
+          "x": 455,
+          "y": 150,
+          "font_size": 18,
+          "font_path": "assets/fonts/NotoSansTC-Bold.ttf",
+          "color": "#1F5BD6",
+          "format": "{value} Hrs.",
+          "align": "left"
+        },
+        {
+          "name": "temperature",
+          "source": "temperature",
+          "x": 440,
+          "y": 290,
+          "font_size": 18,
+          "font_path": "assets/fonts/NotoSansTC-Bold.ttf",
+          "color": "#1F1F1F",
+          "format": "{value}°C",
+          "align": "left"
+        },
+        {
+          "name": "tolerance",
+          "source": "tolerance",
+          "x": 425,
+          "y": 345,
+          "font_size": 18,
+          "color": "#1F1F1F",
+          "format": "±{value}°C",
+          "align": "left"
+        }
+      ]
+    },
+    {
+      "template_id": "B",
+      "template_image": "assets/templates/template_b.png",
+      "fields": [
+        {
+          "name": "test_time",
+          "source": "test_time",
+          "x": 450,
+          "y": 220,
+          "font_size": 34,
+          "font_path": "assets/fonts/NotoSansTC-Regular.ttf",
+          "color": "#FFFFFF",
+          "format": "{value} Min.",
+          "align": "center"
+        },
+        {
+          "name": "temp_max",
+          "source": "temp_max",
+          "x": 450,
+          "y": 300,
+          "font_size": 34,
+          "color": [255, 215, 0],
+          "format": "MAX {value}°C",
+          "align": "center"
+        }
+      ]
+    }
+  ]
+}

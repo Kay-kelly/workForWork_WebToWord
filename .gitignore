@@ -1,0 +1,37 @@
+# Python
+.venv/
+venv/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build outputs
+build/
+dist/
+*.spec.tmp
+*.manifest
+*.pkg
+*.egg-info/
+
+# Project runtime outputs
+project/output/
+
+# Tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Editors and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Excel temp files
+~$*
+
+# Logs and local env
+*.log
+.env
+.env.*
