@@ -14,8 +14,14 @@ dist/
 *.pkg
 *.egg-info/
 
-# Project runtime outputs
+# ETL data (VERY IMPORTANT)
+# =========================
+data/input/*
+data/stage/*
+data/output/
 project/output/
+tmp/
+temp/
 
 # Tool caches
 .pytest_cache/
@@ -27,6 +33,9 @@ project/output/
 .idea/
 .DS_Store
 Thumbs.db
+*.db
+*.sqlite
+*.sqlite3
 
 # Excel temp files
 ~$*
