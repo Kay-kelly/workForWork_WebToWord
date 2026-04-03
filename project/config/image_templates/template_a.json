@@ -1,0 +1,38 @@
+{
+  "template_id": "A",
+  "template_image": "assets/templates/template_a.png",
+  "fields": [
+    {
+      "name": "duration",
+      "source": "duration",
+      "x": 455,
+      "y": 150,
+      "font_size": 18,
+      "font_path": "assets/fonts/NotoSansTC-Bold.ttf",
+      "color": "#1F5BD6",
+      "format": "{value} Hrs.",
+      "align": "left"
+    },
+    {
+      "name": "temperature",
+      "source": "temperature",
+      "x": 440,
+      "y": 290,
+      "font_size": 18,
+      "font_path": "assets/fonts/NotoSansTC-Bold.ttf",
+      "color": "#1F1F1F",
+      "format": "{value}簞C",
+      "align": "left"
+    },
+    {
+      "name": "tolerance",
+      "source": "tolerance",
+      "x": 425,
+      "y": 345,
+      "font_size": 18,
+      "color": "#1F1F1F",
+      "format": "簣{value}簞C",
+      "align": "left"
+    }
+  ]
+}

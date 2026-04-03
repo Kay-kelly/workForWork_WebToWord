@@ -1,0 +1,22 @@
+{
+  "project_id": "mvp_project",
+  "test_id": "mvp_image_report",
+  "image_template_mapping": "../image_templates/template_a.json",
+  "render_defaults": {
+    "default_font_path": "assets/fonts/NotoSansTC-Regular.ttf",
+    "default_font_size": 24,
+    "default_color": "#000000",
+    "default_align": "left",
+    "debug_grid": false
+  },
+  "pipeline": [
+    {
+      "step": "generate_image",
+      "artifact_key": "base_image"
+    },
+    {
+      "step": "overlay_text",
+      "input_artifact_key": "base_image"
+    }
+  ]
+}

@@ -9,20 +9,13 @@ shared data -> generate_image -> overlay_text
 import sys
 from pathlib import Path
 
-from config_loader import ConfigLoader
 from excel_reader import read_excel_rows
 from normalizers.excel_to_shared import normalize_excel_row
+from pipelines.config_loader import PipelineConfigLoader
 from pipelines.runner import run_pipeline
 
 
-DEFAULT_PROJECT_ID = "mvp_project"
-DEFAULT_TEST_ID = "mvp_image_report"
-DEFAULT_IMAGE_TEMPLATE_ID = "A"
-
-MVP_PIPELINE_STEPS = [
-    {"step": "generate_image", "artifact_key": "base_image"},
-    {"step": "overlay_text", "input_artifact_key": "base_image"},
-]
+DEFAULT_PIPELINE_CONFIG_PATH = Path("config") / "pipelines" / "mvp_image_pipeline.json"
 
 
 def get_base_dir() -> Path:
@@ -36,15 +29,17 @@ def get_base_dir() -> Path:
 def main() -> None:
     """執行第一版最小 pipeline。"""
     base_dir = get_base_dir()
-    config_path = base_dir / "config" / "mapping.json"
+    pipeline_config_path = resolve_pipeline_config_path(base_dir)
     excel_path = base_dir / "data" / "input.xlsx"
     output_dir = base_dir / "output" / "pipeline_mvp"
 
-    config = ConfigLoader(config_path)
-    template_config = config.get_template(DEFAULT_IMAGE_TEMPLATE_ID)
+    pipeline_config = PipelineConfigLoader(
+        pipeline_config_path,
+        base_dir=base_dir,
+    ).load()
     raw_rows = read_excel_rows(excel_path)
 
-    debug_grid = config.global_config.get("debug_grid", False)
+    debug_grid = pipeline_config["render_defaults"].get("debug_grid", False)
     if "--debug" in sys.argv:
         debug_grid = True
 
@@ -55,20 +50,41 @@ def main() -> None:
     for raw_row in raw_rows:
         shared_data = normalize_excel_row(
             raw_row,
-            project_id=DEFAULT_PROJECT_ID,
-            test_id=DEFAULT_TEST_ID,
+            project_id=pipeline_config["project_id"],
+            test_id=pipeline_config["test_id"],
         )
 
         final_output_path = run_pipeline(
             shared_data,
-            pipeline_steps=MVP_PIPELINE_STEPS,
-            template_config=template_config,
-            global_config=config.global_config,
+            pipeline_steps=pipeline_config["pipeline_steps"],
+            template_config=pipeline_config["image_template_config"],
+            global_config=pipeline_config["render_defaults"],
             base_dir=base_dir,
             output_dir=output_dir,
             debug_grid=debug_grid,
         )
         print(f"完成 MVP pipeline: {final_output_path}")
+
+
+def resolve_pipeline_config_path(base_dir: Path) -> Path:
+    """允許用 --config 指定外部 pipeline config。"""
+    if "--config" in sys.argv:
+        config_index = sys.argv.index("--config")
+        if config_index + 1 >= len(sys.argv):
+            raise ValueError("--config 後面必須接 config 路徑。")
+
+        return resolve_cli_path(base_dir, sys.argv[config_index + 1])
+
+    return base_dir / DEFAULT_PIPELINE_CONFIG_PATH
+
+
+def resolve_cli_path(base_dir: Path, raw_path: str) -> Path:
+    """解析 CLI 傳入的相對或絕對路徑。"""
+    path = Path(raw_path)
+    if path.is_absolute():
+        return path
+
+    return (base_dir / path).resolve()
 
 
 if __name__ == "__main__":
