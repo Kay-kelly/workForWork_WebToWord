@@ -1,9 +1,10 @@
 {
   "project_id": "mvp_project",
   "test_id": "mvp_image_report",
-  "image_template_mapping": "../image_templates/template_a.json",
+  "image_template_mapping": "../image_templates/cycle_diagram.json",
   "render_defaults": {
     "default_font_path": "assets/fonts/NotoSansTC-Regular.ttf",
+    "default_bold_font_path": "assets/fonts/NotoSansTC-Bold.ttf",
     "default_font_size": 24,
     "default_color": "#000000",
     "default_align": "left",

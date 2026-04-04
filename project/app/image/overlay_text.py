@@ -18,6 +18,23 @@ from renderer import (
 )
 
 
+def resolve_font_weight_field(field: dict, global_config: dict) -> dict:
+    """依 font_weight 決定要使用哪個字型檔。"""
+    resolved_field = dict(field)
+    font_weight = str(field.get("font_weight", "normal")).strip().lower()
+
+    if font_weight == "bold":
+        bold_font_path = (
+            field.get("bold_font_path")
+            or global_config.get("default_bold_font_path")
+            or field.get("font_path")
+        )
+        if bold_font_path:
+            resolved_field["font_path"] = bold_font_path
+
+    return resolved_field
+
+
 def overlay_text(
     shared_data: SharedData,
     *,
@@ -44,21 +61,25 @@ def overlay_text(
             draw_debug_grid(image, draw)
 
         for field in template_config.get("fields", []):
-            source_name = str(field["source"]).strip()
-            if source_name not in shared_data.payload:
-                raise ValueError(
-                    "SharedData 缺少 overlay_text 所需欄位: "
-                    f"record_id='{shared_data.record_id}', source='{source_name}'"
-                )
+            if "text" in field:
+                text = str(field.get("text", ""))
+            else:
+                source_name = str(field["source"]).strip()
+                if source_name not in shared_data.payload:
+                    raise ValueError(
+                        "SharedData 缺少 overlay_text 所需欄位: "
+                        f"record_id='{shared_data.record_id}', source='{source_name}'"
+                    )
 
-            value = shared_data.get_value(source_name)
-            if value is None:
-                value = ""
+                value = shared_data.get_value(source_name)
+                if value is None:
+                    value = ""
 
-            text_template = field.get("format", "{value}")
-            text = text_template.replace("{value}", str(value))
+                text_template = field.get("format", "{value}")
+                text = text_template.replace("{value}", str(value))
 
-            font = load_font(field, global_config, base_dir)
+            resolved_field = resolve_font_weight_field(field, global_config)
+            font = load_font(resolved_field, global_config, base_dir)
             color = parse_color(
                 field.get("color", global_config.get("default_color", "#000000"))
             )
