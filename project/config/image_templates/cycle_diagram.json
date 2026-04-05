@@ -26,7 +26,7 @@
     "min_cycle_count": 2,
     "cycle_zone": {
       "start_x": 180,
-      "end_x": 820
+      "end_x": 900
     },
     "levels": {
       "start": 300,
@@ -79,13 +79,13 @@
     }
   },
   "markers": [
-    { "marker_key": "start_condition_a", "anchor": "start", "type": "filled_circle", "dx": 0, "dy": 0, "size": 20 },
-    { "marker_key": "start_condition_b", "anchor": "start", "type": "triangle_up", "dx": 28, "dy": 0, "size": 20 },
-    { "marker_key": "start_condition_c", "anchor": "start", "type": "hollow_circle", "dx": 56, "dy": 0, "size": 20 },
-    { "marker_key": "lead_kink_info", "anchor": "named_anchor", "anchor_ref": "lead_kink", "type": "triangle_up", "dx": 0, "dy": 0, "size": 24 },
-    { "marker_key": "end_condition_a", "anchor": "end", "type": "filled_circle", "dx": 0, "dy": 0, "size": 20 },
-    { "marker_key": "end_condition_b", "anchor": "end", "type": "triangle_up", "dx": -28, "dy": 0, "size": 20 },
-    { "marker_key": "end_condition_c", "anchor": "end", "type": "hollow_circle", "dx": -56, "dy": 0, "size": 20 }
+    { "marker_key": "start_condition_a", "anchor": "start", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "start_condition_b", "anchor": "start", "type": "triangle_up", "dx": 15, "dy": 0, "size": 15 },
+    { "marker_key": "start_condition_c", "anchor": "start", "type": "hollow_circle", "dx": 30, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info", "anchor": "named_anchor", "anchor_ref": "lead_kink", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "end_condition_a", "anchor": "end", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "end_condition_b", "anchor": "end", "type": "triangle_up", "dx": -15, "dy": 0, "size": 15 },
+    { "marker_key": "end_condition_c", "anchor": "end", "type": "hollow_circle", "dx": -30, "dy": 0, "size": 15 }
   ],
   "guides": [
     {
