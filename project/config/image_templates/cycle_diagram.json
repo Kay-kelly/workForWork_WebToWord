@@ -34,16 +34,21 @@
       "outer_high": 140,
       "inner_high": 200,
       "inner_low": 400,
-      "outer_low": 460
+      "outer_low": 460,
+      "a_bit_high_then_start": 280
     },
     "left_lead_segments": [
       { "type": "hold", "ratio": 1.0, "to_level": "start" }
     ],
-    "outer_block": [
-      { "type": "rise", "ratio": 0.16, "to_level": "outer_high" },
-      { "type": "hold", "ratio": 0.34, "to_level": "outer_high" },
-      { "type": "fall", "ratio": 0.16, "to_level": "outer_low" },
-      { "type": "hold", "ratio": 0.34, "to_level": "outer_low" }
+    "outer_first_block": [
+      { "type": "rise", "ratio": 0.12, "to_level": "outer_high" },
+      { "type": "hold", "ratio": 0.18, "to_level": "outer_high" },
+      { "type": "fall", "ratio": 0.12, "to_level": "inner_high" },
+      { "type": "hold", "ratio": 0.16, "to_level": "inner_high" },
+      { "type": "fall", "ratio": 0.14, "to_level": "outer_low" },
+      { "type": "hold", "ratio": 0.20, "to_level": "outer_low" },
+      { "type": "rise", "ratio": 0.08, "to_level": "inner_low" },
+      { "type": "hold", "ratio": 0.12, "to_level": "inner_low" }
     ],
     "inner_block": [
       { "type": "rise", "ratio": 0.16, "to_level": "inner_high" },
@@ -51,9 +56,22 @@
       { "type": "fall", "ratio": 0.16, "to_level": "inner_low" },
       { "type": "hold", "ratio": 0.34, "to_level": "inner_low" }
     ],
+    "outer_last_block": [
+      { "type": "rise", "ratio": 0.09, "to_level": "outer_high" },
+      { "type": "hold", "ratio": 0.11, "to_level": "outer_high" },
+      { "type": "fall", "ratio": 0.08, "to_level": "inner_high" },
+      { "type": "hold", "ratio": 0.09, "to_level": "inner_high" },
+      { "type": "fall", "ratio": 0.10, "to_level": "outer_low" },
+      { "type": "hold", "ratio": 0.12, "to_level": "outer_low" },
+      { "type": "rise", "ratio": 0.08, "to_level": "inner_low" },
+      { "type": "hold", "ratio": 0.08, "to_level": "inner_low" },
+      { "type": "rise", "ratio": 0.05, "to_level": "a_bit_high_then_start" },
+      { "type": "hold", "ratio": 0.09, "to_level": "a_bit_high_then_start" },
+      { "type": "fall", "ratio": 0.05, "to_level": "start" },
+      { "type": "hold", "ratio": 0.06, "to_level": "start" }
+    ],
     "right_tail_segments": [
-      { "type": "rise", "ratio": 0.5, "to_level": "end" },
-      { "type": "hold", "ratio": 0.5, "to_level": "end" }
+      { "type": "hold", "ratio": 1.0, "to_level": "start" }
     ],
     "line_style": {
       "color": "#4C7FE1",

@@ -1,8 +1,16 @@
 """
 generate_image.py
 
-第一版 generate_image 只做一件事：
-載入 base image template，輸出一張基礎圖。
+目前穩定版的 generate_image 主要負責 cycle diagram 底圖：
+
+- 固定尺寸畫布
+- 外框與左側刻度
+- path 幾何
+- marker
+- guides
+
+檔案內仍保留 `legacy_generate_image()`，方便對照早期
+「載入 base image template 再另存」的舊版做法。
 """
 
 import math
@@ -22,10 +30,10 @@ def legacy_generate_image(
     output_path: Path,
 ) -> Path:
     """
-    根據 pipeline 指定的 base image template 產出基礎圖。
+    舊版 generate_image。
 
-    第一版先固定只支援：
-    載入 template_image -> 另存成 pipeline 的中間圖片。
+    這個版本只做：
+    載入 template_image -> 另存成 pipeline 的中間圖片
     """
     if not template_config.get("template_image"):
         raise ValueError("generate_image 缺少 template_image 設定。")
@@ -93,6 +101,10 @@ def generate_image(
         frame_config=frame_config,
         path_builder=path_builder,
     )
+    # 目前保留簡單 debug 輸出，方便確認實際存在的 named anchors。
+    print("named_anchors.keys():")
+    for anchor_name in path_result["named_anchors"].keys():
+        print(f"* {anchor_name}")
     points = path_result["points"]
     line_style = path_builder["line_style"]
     draw.line(
@@ -250,15 +262,16 @@ def build_cycle_path_result(
 
 
 def build_block_sequence(cycle_count: int, path_builder: dict) -> list[tuple[str, int, list[dict]]]:
-    """組出 outer / inner / outer 的 block 序列。"""
-    outer_block = path_builder["outer_block"]
+    """組出 outer_first / inner / outer_last 的 block 序列。"""
+    outer_first_block = path_builder["outer_first_block"]
     inner_block = path_builder["inner_block"]
+    outer_last_block = path_builder["outer_last_block"]
 
-    sequence: list[tuple[str, int, list[dict]]] = [("outer", 1, outer_block)]
+    sequence: list[tuple[str, int, list[dict]]] = [("outer", 1, outer_first_block)]
     inner_count = max(cycle_count - 2, 0)
     for index in range(1, inner_count + 1):
         sequence.append(("inner", index, inner_block))
-    sequence.append(("outer", 2, outer_block))
+    sequence.append(("outer", 2, outer_last_block))
     return sequence
 
 
