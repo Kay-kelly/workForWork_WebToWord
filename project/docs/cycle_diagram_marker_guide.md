@@ -104,6 +104,22 @@ hold -> start
 - 想改最後收尾：看 `outer_last_block`
 - 想改最尾端最後一小段：看 `right_tail_segments`
 
+### `left_ticks.levels` 與 `path_builder.levels` 的對應
+
+目前 `left_ticks.levels` 是獨立寫在 config 的固定 y 值，
+不是程式自動從 `path_builder.levels` 推導出來。
+
+但目前穩定版的設計語意是對齊的，對應如下：
+
+- `140` -> `outer_high`
+- `190` -> `inner_high` 附近的左側刻度
+- `295` -> `start` 附近的左側刻度
+- `400` -> `inner_low`
+- `460` -> `outer_low`
+
+如果後續調整 `path_builder.levels`，要一起檢查 `left_ticks.levels`
+是否仍維持這組對應，不要只改其中一邊。
+
 ## 4. 哪些 config 用來改 marker / guides / overlay_text
 
 `cycle_diagram.json` 目前可分成三層：
@@ -148,6 +164,17 @@ marker 目前可用的 `anchor` 有三種：
 
 不要用 `start + dx/dy` 或 `end + dx/dy` 硬推一個其實屬於線上轉折點的位置。
 
+### marker 目前怎麼對齊 anchor
+
+目前 marker 一律以幾何中心對 anchor。
+
+- `filled_circle`：圓心對 anchor
+- `hollow_circle`：圓心對 anchor
+- `triangle_up`：三角形幾何中心對 anchor，不是尖端對 anchor
+
+如果視覺上想讓某個 marker 看起來偏上或偏下，請用 `dx` / `dy`
+做微調，但 anchor 的基準點仍然是幾何中心。
+
 ## 6. 目前實際可用的 named anchors
 
 以下清單已和目前 `generate_image` 的 debug 輸出對齊。
@@ -163,6 +190,20 @@ marker 目前可用的 `anchor` 有三種：
 - `outer_2_low`
 - `tail_start`
 - `path_end`
+
+其中：
+
+- `lead_kink`
+- `lead_end`
+
+目前在幾何上是同一個點，只是保留不同語意名稱。
+
+也就是說：
+
+- `lead_kink` 比較偏「起始 lead 的轉折語意」
+- `lead_end` 比較偏「左側 lead 區段結束語意」
+
+現階段如果 marker 掛在這兩個 anchor，上圖位置會重合，這是目前預期行為。
 
 ### 依 `cycle_count` 增加
 

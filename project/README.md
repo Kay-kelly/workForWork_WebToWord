@@ -21,6 +21,19 @@
 - `overlay_text`
 - `cycle_diagram.json`
 
+這裡的 pipeline 是目前 stabilization 階段的 MVP 固定流程，
+不是完整通用 pipeline 引擎。
+
+目前實際落地的步驟順序固定為：
+
+- `generate_image -> overlay_text`
+
+目前還沒有落地：
+
+- 任意 step 組合
+- 部分流程執行
+- 完整通用的 step 參數化 pipeline
+
 ## 舊版入口
 
 - `app/main.py`
