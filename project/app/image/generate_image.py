@@ -230,6 +230,27 @@ def build_cycle_path_result(
 
     block_sequence = build_block_sequence(cycle_count, path_builder)
     for block_kind, block_index, block_segments in block_sequence:
+        if block_kind == "outer":
+            if block_index == 1:
+                named_anchors.update(
+                    compute_outer_first_special_anchors(
+                        segments=block_segments,
+                        total_width=block_width,
+                        start_x=current_x,
+                        start_y=current_y,
+                        levels=levels,
+                    )
+                )
+            elif block_index == 2:
+                named_anchors.update(
+                    compute_outer_last_special_anchors(
+                        segments=block_segments,
+                        total_width=block_width,
+                        start_x=current_x,
+                        start_y=current_y,
+                        levels=levels,
+                    )
+                )
         current_x, current_y = append_segments(
             points,
             segments=block_segments,
@@ -273,6 +294,223 @@ def build_block_sequence(cycle_count: int, path_builder: dict) -> list[tuple[str
         sequence.append(("inner", index, inner_block))
     sequence.append(("outer", 2, outer_last_block))
     return sequence
+
+
+def compute_outer_first_special_anchors(
+    *,
+    segments: list[dict],
+    total_width: float,
+    start_x: float,
+    start_y: float,
+    levels: dict,
+) -> dict[str, tuple[float, float]]:
+    current_x = start_x
+    current_y = start_y
+    total_ratio = sum(float(segment["ratio"]) for segment in segments)
+    if total_ratio <= 0:
+        raise ValueError("segment ratio total must be greater than 0.")
+
+    inner_high_y = float(levels["inner_high"])
+    inner_low_y = float(levels["inner_low"])
+    anchors: dict[str, tuple[float, float]] = {}
+
+    for segment in segments:
+        next_x = current_x + (total_width * float(segment["ratio"]) / total_ratio)
+        next_y = float(levels[segment["to_level"]])
+
+        if (
+            segment["type"] == "rise"
+            and segment["to_level"] == "outer_high"
+            and "outer_1_rise_at_inner_high" not in anchors
+        ):
+            if current_y == next_y:
+                raise ValueError("Cannot interpolate outer_1_rise_at_inner_high on a flat segment.")
+
+            interpolation_ratio = (inner_high_y - current_y) / (next_y - current_y)
+            if not 0.0 <= interpolation_ratio <= 1.0:
+                raise ValueError("inner_high is outside the first outer rise segment.")
+
+            anchor_x = current_x + ((next_x - current_x) * interpolation_ratio)
+            anchors["outer_1_rise_at_inner_high"] = (anchor_x, inner_high_y)
+
+        if (
+            segment["type"] == "fall"
+            and segment["to_level"] == "inner_high"
+            and "outer_1_inner_high" not in anchors
+        ):
+            anchors["outer_1_inner_high"] = (next_x, inner_high_y)
+
+        if (
+            segment["type"] == "hold"
+            and segment["to_level"] == "inner_high"
+            and "outer_1_inner_high_end" not in anchors
+        ):
+            anchors["outer_1_inner_high_end"] = (next_x, inner_high_y)
+
+        if (
+            segment["type"] == "fall"
+            and segment["to_level"] == "outer_low"
+            and "outer_1_fall_at_inner_low" not in anchors
+        ):
+            anchor_x = interpolate_segment_x_at_y(
+                start_x=current_x,
+                start_y=current_y,
+                end_x=next_x,
+                end_y=next_y,
+                target_y=inner_low_y,
+                anchor_name="outer_1_fall_at_inner_low",
+            )
+            anchors["outer_1_fall_at_inner_low"] = (anchor_x, inner_low_y)
+
+        if (
+            segment["type"] == "rise"
+            and segment["to_level"] == "inner_low"
+            and "outer_1_inner_low" not in anchors
+        ):
+            anchors["outer_1_inner_low"] = (next_x, inner_low_y)
+
+        if (
+            segment["type"] == "hold"
+            and segment["to_level"] == "inner_low"
+            and "outer_1_inner_low_end" not in anchors
+        ):
+            anchors["outer_1_inner_low_end"] = (next_x, inner_low_y)
+
+        current_x = next_x
+        current_y = next_y
+
+    if "outer_1_rise_at_inner_high" not in anchors:
+        raise ValueError("Missing geometry for outer_1_rise_at_inner_high.")
+    if "outer_1_inner_high" not in anchors:
+        raise ValueError("Missing geometry for outer_1_inner_high.")
+    if "outer_1_inner_high_end" not in anchors:
+        raise ValueError("Missing geometry for outer_1_inner_high_end.")
+    if "outer_1_fall_at_inner_low" not in anchors:
+        raise ValueError("Missing geometry for outer_1_fall_at_inner_low.")
+    if "outer_1_inner_low" not in anchors:
+        raise ValueError("Missing geometry for outer_1_inner_low.")
+    if "outer_1_inner_low_end" not in anchors:
+        raise ValueError("Missing geometry for outer_1_inner_low_end.")
+
+    return anchors
+
+
+def compute_outer_last_special_anchors(
+    *,
+    segments: list[dict],
+    total_width: float,
+    start_x: float,
+    start_y: float,
+    levels: dict,
+) -> dict[str, tuple[float, float]]:
+    current_x = start_x
+    current_y = start_y
+    total_ratio = sum(float(segment["ratio"]) for segment in segments)
+    if total_ratio <= 0:
+        raise ValueError("segment ratio total must be greater than 0.")
+
+    inner_high_y = float(levels["inner_high"])
+    inner_low_y = float(levels["inner_low"])
+    anchors: dict[str, tuple[float, float]] = {}
+
+    for segment in segments:
+        next_x = current_x + (total_width * float(segment["ratio"]) / total_ratio)
+        next_y = float(levels[segment["to_level"]])
+
+        if (
+            segment["type"] == "rise"
+            and segment["to_level"] == "outer_high"
+            and "outer_2_rise_at_inner_high" not in anchors
+        ):
+            anchor_x = interpolate_segment_x_at_y(
+                start_x=current_x,
+                start_y=current_y,
+                end_x=next_x,
+                end_y=next_y,
+                target_y=inner_high_y,
+                anchor_name="outer_2_rise_at_inner_high",
+            )
+            anchors["outer_2_rise_at_inner_high"] = (anchor_x, inner_high_y)
+
+        if (
+            segment["type"] == "fall"
+            and segment["to_level"] == "inner_high"
+            and "outer_2_inner_high" not in anchors
+        ):
+            anchors["outer_2_inner_high"] = (next_x, inner_high_y)
+
+        if (
+            segment["type"] == "hold"
+            and segment["to_level"] == "inner_high"
+            and "outer_2_inner_high_end" not in anchors
+        ):
+            anchors["outer_2_inner_high_end"] = (next_x, inner_high_y)
+
+        if (
+            segment["type"] == "fall"
+            and segment["to_level"] == "outer_low"
+            and "outer_2_fall_at_inner_low" not in anchors
+        ):
+            anchor_x = interpolate_segment_x_at_y(
+                start_x=current_x,
+                start_y=current_y,
+                end_x=next_x,
+                end_y=next_y,
+                target_y=inner_low_y,
+                anchor_name="outer_2_fall_at_inner_low",
+            )
+            anchors["outer_2_fall_at_inner_low"] = (anchor_x, inner_low_y)
+
+        if (
+            segment["type"] == "rise"
+            and segment["to_level"] == "inner_low"
+            and "outer_2_inner_low" not in anchors
+        ):
+            anchors["outer_2_inner_low"] = (next_x, inner_low_y)
+
+        if (
+            segment["type"] == "hold"
+            and segment["to_level"] == "inner_low"
+            and "outer_2_inner_low_end" not in anchors
+        ):
+            anchors["outer_2_inner_low_end"] = (next_x, inner_low_y)
+
+        current_x = next_x
+        current_y = next_y
+
+    if "outer_2_rise_at_inner_high" not in anchors:
+        raise ValueError("Missing geometry for outer_2_rise_at_inner_high.")
+    if "outer_2_inner_high" not in anchors:
+        raise ValueError("Missing geometry for outer_2_inner_high.")
+    if "outer_2_inner_high_end" not in anchors:
+        raise ValueError("Missing geometry for outer_2_inner_high_end.")
+    if "outer_2_fall_at_inner_low" not in anchors:
+        raise ValueError("Missing geometry for outer_2_fall_at_inner_low.")
+    if "outer_2_inner_low" not in anchors:
+        raise ValueError("Missing geometry for outer_2_inner_low.")
+    if "outer_2_inner_low_end" not in anchors:
+        raise ValueError("Missing geometry for outer_2_inner_low_end.")
+
+    return anchors
+
+
+def interpolate_segment_x_at_y(
+    *,
+    start_x: float,
+    start_y: float,
+    end_x: float,
+    end_y: float,
+    target_y: float,
+    anchor_name: str,
+) -> float:
+    if start_y == end_y:
+        raise ValueError(f"Cannot interpolate {anchor_name} on a flat segment.")
+
+    interpolation_ratio = (target_y - start_y) / (end_y - start_y)
+    if not 0.0 <= interpolation_ratio <= 1.0:
+        raise ValueError(f"{anchor_name} target y is outside the segment range.")
+
+    return start_x + ((end_x - start_x) * interpolation_ratio)
 
 
 def append_segments(

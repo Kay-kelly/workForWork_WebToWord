@@ -82,7 +82,23 @@
     { "marker_key": "start_condition_a", "anchor": "start", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
     { "marker_key": "start_condition_b", "anchor": "start", "type": "triangle_up", "dx": 15, "dy": 0, "size": 15 },
     { "marker_key": "start_condition_c", "anchor": "start", "type": "hollow_circle", "dx": 30, "dy": 0, "size": 15 },
-    { "marker_key": "lead_kink_info", "anchor": "named_anchor", "anchor_ref": "lead_kink", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_a", "anchor": "named_anchor", "anchor_ref": "lead_kink", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_b", "anchor": "named_anchor", "anchor_ref": "outer_1_rise_at_inner_high", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_c", "anchor": "named_anchor", "anchor_ref": "outer_1_inner_high", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_d", "anchor": "named_anchor", "anchor_ref": "outer_1_inner_high_end", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    
+    { "marker_key": "lead_kink_info_e", "anchor": "named_anchor", "anchor_ref": "outer_1_fall_at_inner_low", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_h", "anchor": "named_anchor", "anchor_ref": "outer_1_inner_low", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_g", "anchor": "named_anchor", "anchor_ref": "outer_1_inner_low_end", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    
+    { "marker_key": "lead_kink_info_h", "anchor": "named_anchor", "anchor_ref": "outer_2_rise_at_inner_high", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_i", "anchor": "named_anchor", "anchor_ref": "outer_2_inner_high", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_j", "anchor": "named_anchor", "anchor_ref": "outer_2_inner_high_end", "type": "triangle_up", "dx": 0, "dy": 0, "size": 15 },
+    
+    { "marker_key": "lead_kink_info_k", "anchor": "named_anchor", "anchor_ref": "outer_2_fall_at_inner_low", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_l", "anchor": "named_anchor", "anchor_ref": "outer_2_inner_low", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
+    { "marker_key": "lead_kink_info_m", "anchor": "named_anchor", "anchor_ref": "outer_2_inner_low_end", "type": "triangle_up", "dx": 0, "dy": 0, "size": 15 },
+    
     { "marker_key": "end_condition_a", "anchor": "end", "type": "filled_circle", "dx": 0, "dy": 0, "size": 15 },
     { "marker_key": "end_condition_b", "anchor": "end", "type": "triangle_up", "dx": -15, "dy": 0, "size": 15 },
     { "marker_key": "end_condition_c", "anchor": "end", "type": "hollow_circle", "dx": -30, "dy": 0, "size": 15 }
