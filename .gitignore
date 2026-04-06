@@ -5,6 +5,7 @@ venv/
 *.pyc
 *.pyo
 *.pyd
+project/venv/
 
 # Build outputs
 build/
@@ -44,3 +45,6 @@ Thumbs.db
 *.log
 .env
 .env.*
+
+# project runtime data
+project/data/runtime/
