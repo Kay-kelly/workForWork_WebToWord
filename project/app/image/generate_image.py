@@ -125,6 +125,27 @@ def generate_image(
         },
         default_color=parse_color(line_style["color"]),
     )
+    guides = []
+    for guide in template_config.get("guides", []):
+        resolved_guide = dict(guide)
+        midpoint_anchor_refs = resolved_guide.get("target_named_anchor_midpoint")
+        if midpoint_anchor_refs is not None:
+            if not isinstance(midpoint_anchor_refs, list) or len(midpoint_anchor_refs) != 2:
+                raise ValueError("guide target_named_anchor_midpoint must provide exactly 2 anchor refs.")
+
+            start_anchor_ref, end_anchor_ref = midpoint_anchor_refs
+            named_anchors = path_result["named_anchors"]
+            if start_anchor_ref not in named_anchors or end_anchor_ref not in named_anchors:
+                raise ValueError("guide target_named_anchor_midpoint contains unknown named anchors.")
+
+            start_anchor = named_anchors[start_anchor_ref]
+            end_anchor = named_anchors[end_anchor_ref]
+            resolved_guide["x2"] = (start_anchor[0] + end_anchor[0]) / 2
+            resolved_guide["y2"] = (start_anchor[1] + end_anchor[1]) / 2
+
+        guides.append(resolved_guide)
+
+    template_config = {**template_config, "guides": guides}
     # guides 屬於 generate_image 的輔助圖形層：
     # 會畫在 frame / ticks / cycle path / markers 之後，
     # 並在 overlay_text 疊字之前完成，避免和文字層責任混在一起。
@@ -475,6 +496,20 @@ def compute_outer_last_special_anchors(
         ):
             anchors["outer_2_inner_low_end"] = (next_x, inner_low_y)
 
+        if (
+            segment["type"] == "rise"
+            and segment["to_level"] == "a_bit_high_then_start"
+            and "outer_2_a_bit_high_then_start" not in anchors
+        ):
+            anchors["outer_2_a_bit_high_then_start"] = (next_x, next_y)
+
+        if (
+            segment["type"] == "hold"
+            and segment["to_level"] == "a_bit_high_then_start"
+            and "outer_2_a_bit_high_then_start_end" not in anchors
+        ):
+            anchors["outer_2_a_bit_high_then_start_end"] = (next_x, next_y)
+
         current_x = next_x
         current_y = next_y
 
@@ -490,6 +525,10 @@ def compute_outer_last_special_anchors(
         raise ValueError("Missing geometry for outer_2_inner_low.")
     if "outer_2_inner_low_end" not in anchors:
         raise ValueError("Missing geometry for outer_2_inner_low_end.")
+    if "outer_2_a_bit_high_then_start" not in anchors:
+        raise ValueError("Missing geometry for outer_2_a_bit_high_then_start.")
+    if "outer_2_a_bit_high_then_start_end" not in anchors:
+        raise ValueError("Missing geometry for outer_2_a_bit_high_then_start_end.")
 
     return anchors
 

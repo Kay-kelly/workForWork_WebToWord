@@ -154,15 +154,19 @@
       "y1": 418,
       "x2": 880,
       "y2": 338,
-      "color": "#999999",
-      "width": 2
+      "color": "#000000",
+      "width": 3
     },
     {
       "type": "arrow",
-      "x1": 842,
-      "y1": 445,
+      "x1": 872,
+      "y1": 245,
       "x2": 848,
       "y2": 382,
+      "target_named_anchor_midpoint": [
+        "outer_2_a_bit_high_then_start",
+        "outer_2_a_bit_high_then_start_end"
+      ],
       "color": "#999999",
       "width": 2
     }

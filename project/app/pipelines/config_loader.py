@@ -188,6 +188,8 @@ FIXED_NAMED_ANCHORS = {
     "outer_2_fall_at_inner_low",
     "outer_2_inner_low",
     "outer_2_inner_low_end",
+    "outer_2_a_bit_high_then_start",
+    "outer_2_a_bit_high_then_start_end",
     "outer_1_high",
     "outer_1_low",
     "outer_2_high",
