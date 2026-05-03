@@ -78,6 +78,18 @@ project/output/pipeline_mvp/
 2. `project/docs/cycle_diagram_marker_guide.md`
 3. `project/app/image/generate_image.py`
 
+## Setup
+
+Required Python version: Python 3.11.9
+
+建議使用 virtual environment。
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+```
+
 ## Quick Start
 
 Current entrypoint: `project/app/pipeline_main.py`
