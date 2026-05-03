@@ -101,10 +101,7 @@ def generate_image(
         frame_config=frame_config,
         path_builder=path_builder,
     )
-    # 目前保留簡單 debug 輸出，方便確認實際存在的 named anchors。
-    print("named_anchors.keys():")
-    for anchor_name in path_result["named_anchors"].keys():
-        print(f"* {anchor_name}")
+    # Debug-only anchor inspection was disabled for clean pipeline output.
     points = path_result["points"]
     line_style = path_builder["line_style"]
     draw.line(

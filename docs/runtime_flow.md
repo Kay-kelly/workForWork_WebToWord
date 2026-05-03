@@ -1,5 +1,18 @@
 # Runtime Flow
 
+## Current Flow（MVP）
+
+Current MVP pipeline:
+
+```text
+pipeline_main.py
+-> SharedData
+-> generate_image
+-> overlay_text
+```
+
+`main.py` + `mapping.json` is legacy flow.
+
 本文依據目前 repo 內的實際程式碼說明執行流程，對應檔案主要為：
 
 - `project/app/main.py`

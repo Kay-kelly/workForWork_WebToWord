@@ -77,3 +77,21 @@ project/output/pipeline_mvp/
 1. `project/config/image_templates/cycle_diagram.json`
 2. `project/docs/cycle_diagram_marker_guide.md`
 3. `project/app/image/generate_image.py`
+
+## Quick Start
+
+Current entrypoint: `project/app/pipeline_main.py`
+
+`app/main.py` is legacy.
+
+1. Copy sample input:
+
+```powershell
+cp project/data/sample/demo_input.xlsx project/data/input.xlsx
+```
+
+2. Run pipeline:
+
+```powershell
+python project/app/pipeline_main.py
+```

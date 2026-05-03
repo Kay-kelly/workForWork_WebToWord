@@ -47,4 +47,5 @@ Thumbs.db
 .env.*
 
 # project runtime data
+project/data/input.xlsx
 project/data/runtime/
